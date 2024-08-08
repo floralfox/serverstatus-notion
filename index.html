@@ -3,20 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Server Widget</title>
+    <title>Minecraft  
+ Server Widget</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link  
+ href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&display=swap" rel="stylesheet">  
+ 
     <style>
-        /* ... (Same CSS as before) */ 
+        body {
+            font-family: "Crimson Pro", serif;
+            background-color: transparent; /* Set background to transparent */
+        }
+
+        #widget {
+            background-color: #181a1b;
+            color: #d1d1d1;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center; /* Center all text */
+        }
+
+        #widget h2 {
+            color: #d79921;
+        }
+
+        #widget h3 {
+            color: #458588;
+            margin-top: 0;
+        }
+
+        #server-info p {
+            margin: 5px 0; /* Adjust spacing between lines as needed */
+        }
+
+        #ip {
+            color: #7c6fc4;
+        }
+
+        #status.online {
+            color: #98978a;
+        }
+
+        #status.offline {
+            color: #cc241d;
+        }
+
+        #player-info {
+            color: #7c6fc4;
+        }
+
+        .emoji {
+            display: none; /* Hide emojis */
+        }
     </style>
 </head>
 <body>
     <div id="widget">
-        <h2>My Minecraft Server</h2>
+        <h2>Strictly Medieval</h2>
+        <h3>Mythical Valley Tribute</h3>
         <div id="server-info">
-            <p><span class="emoji">🖥️</span> IP: 185.229.32.95:25560</p>
-            <p id="status">Loading...</p>
-            <p id="player-info" style="display: none;"> 
-                Players: <span id="onlinePlayers"></span>/<span id="maxPlayers"></span>
-            </p>
+            <p id="ip">185.229.32.95:25560</p>
+            <p>Server Status: <span id="status">Loading...</span></p>
+            <p id="player-info" style="display: none;">Player Count: <span id="onlinePlayers"></span>/<span id="maxPlayers"></span></p>
         </div>
     </div>
 
@@ -26,16 +75,21 @@
         async function updateStatus() {
             try {
                 const response = await fetch(apiUrl);
-                const data = await response.json(); // Parse JSON response
+                const data = await response.json(); 
 
                 if (data.online) {
                     document.getElementById('status').textContent = 'Online';
+                    document.getElementById('status').classList.add('online');
+                    document.getElementById('status').classList.remove('offline');
                     document.getElementById('onlinePlayers').textContent = data.players.online;
                     document.getElementById('maxPlayers').textContent = data.players.max;
                     document.getElementById('player-info').style.display = 'block';
                 } else {
                     document.getElementById('status').textContent = 'Offline';
-                    document.getElementById('player-info').style.display = 'none';
+                    document.getElementById('status').classList.add('offline');
+                    document.getElementById('status').classList.remove('online');
+                    document.getElementById('player-info').style.display  
+ = 'none';
                 }
             } catch (error) {
                 console.error('Error fetching server status:', error);
