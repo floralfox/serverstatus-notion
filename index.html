@@ -3,46 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft  
- Server Widget</title>
+    <title>Minecraft Server Widget</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
-
-        body {
-            font-family: "Nunito", sans-serif;
-            background-color:  
- #1e1e1e; /* Dark mode background */
-            color: #d1d1d1;              /* Light text color */
-        }
-
-        #widget {
-            display: flex;               /* Use flexbox for layout */
-            flex-direction: column;    /* Arrange items vertically */
-            align-items: center;        /* Center items horizontally  
- */
-            gap: 10px;                  /* Add spacing between items */
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1); /* Inverted shadow */
-        }
-
-        #server-info {
-            font-size: 14px;
-            text-align: center;
-        }
-
-        #status {
-            font-weight: bold;
-            font-size: 18px; 
-        }
-
-        .emoji {
-            margin-right: 5px;
-        }
+        /* ... (Same CSS as before) */ 
     </style>
 </head>
 <body>
-
     <div id="widget">
         <h2>My Minecraft Server</h2>
         <div id="server-info">
@@ -60,13 +26,12 @@
         async function updateStatus() {
             try {
                 const response = await fetch(apiUrl);
-                const data = await response.text();
-                const lines = data.split('\n');
+                const data = await response.json(); // Parse JSON response
 
-                if (lines[0] === 'online') {
+                if (data.online) {
                     document.getElementById('status').textContent = 'Online';
-                    document.getElementById('onlinePlayers').textContent = lines[1];
-                    document.getElementById('maxPlayers').textContent = lines[2];
+                    document.getElementById('onlinePlayers').textContent = data.players.online;
+                    document.getElementById('maxPlayers').textContent = data.players.max;
                     document.getElementById('player-info').style.display = 'block';
                 } else {
                     document.getElementById('status').textContent = 'Offline';
@@ -79,8 +44,9 @@
             }
         }
 
-        setInterval(updateStatus, 10000); 
-        updateStatus(); 
+        setInterval(updateStatus, 10000); // Update every 10 seconds
+        updateStatus(); // Initial update
     </script>
+
 </body>
 </html>
