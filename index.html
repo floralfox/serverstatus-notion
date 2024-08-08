@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Minecraft Server Widget</title>
+  <style>
+    /* Basic styling for the widget */
+    #widget {
+      font-family: sans-serif;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="widget">
+    <h2>My Minecraft Server</h2>
+    <p>Status: <span id="status"></span></p>
+    <p id="playerInfo" style="display: none;"> 
+        Players Online: <span id="onlinePlayers"></span>/<span id="maxPlayers"></span>
+    </p> 
+  </div>
+
+  <script>
+    const apiUrl = 'https://api.mcsrvstat.us/simple/185.229.32.95:25560';
+
+    async function updateStatus() {
+      const response = await fetch(apiUrl);
+      const data = await response.text();
+      const lines = data.split('\n');
+
+      if (lines[0] === 'online') {
+        document.getElementById('status').textContent = 'Online';
+        document.getElementById('onlinePlayers').textContent = lines[1];
+        document.getElementById('maxPlayers').textContent = lines[2];
+        document.getElementById('playerInfo').style.display = 'block'; // Show player info
+      } else {
+        document.getElementById('status').textContent = 'Offline';
+        document.getElementById('playerInfo').style.display = 'none'; // Hide player info
+      }
+    }
+
+    // Update every 10 seconds (or adjust as needed)
+    setInterval(updateStatus, 10000); 
+
+    // Initial update
+    updateStatus();
+  </script>
+</body>
+</html>
