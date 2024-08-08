@@ -59,17 +59,14 @@
     </style>
 </head>
 <body>
-    <div id="widget">
-        <h2>Strictly Medieval</h2>
-        <h3>Mythical Valley Tribute</h3>
-        <div id="server-info">
+<div id="widget">
+        <h2 style="margin-bottom: 2px;">Strictly Medieval</h2> <h3 style="margin-top: 2px;">Mythical Valley Tribute</h3> <div id="server-info">
             <p id="ip">185.229.32.95:25560</p>
             <p>Server Status: <span id="status">Loading...</span></p>
             <p id="player-info" style="display: none;">Player Count: <span id="onlinePlayers"></span>/<span id="maxPlayers"></span></p>
         </div>
     </div>
-
-    <script>
+ <script>
         const apiUrl = 'https://api.mcsrvstat.us/3/185.229.32.95:25560';
 
         async function updateStatus() {
@@ -77,20 +74,20 @@
                 const response = await fetch(apiUrl);
                 const data = await response.json(); 
 
+                const statusElement = document.getElementById('status'); 
                 if (data.online) {
-                    document.getElementById('status').textContent = 'Online';
-                    document.getElementById('status').classList.add('online');
-                    document.getElementById('status').classList.remove('offline');
-                    document.getElementById('onlinePlayers').textContent = data.players.online;
-                    document.getElementById('maxPlayers').textContent = data.players.max;
-                    document.getElementById('player-info').style.display = 'block';
+                    statusElement.textContent = 'Online';
+                    statusElement.classList.add('online');
+                    statusElement.classList.remove('offline');
                 } else {
-                    document.getElementById('status').textContent = 'Offline';
-                    document.getElementById('status').classList.add('offline');
-                    document.getElementById('status').classList.remove('online');
-                    document.getElementById('player-info').style.display  
- = 'none';
+                    statusElement.textContent = 'Offline';
+                    statusElement.classList.add('offline');
+                    statusElement.classList.remove('online');
                 }
+
+                document.getElementById('onlinePlayers').textContent = data.players.online;
+                document.getElementById('maxPlayers').textContent = data.players.max;
+                document.getElementById('player-info').style.display = data.online ? 'block' : 'none';
             } catch (error) {
                 console.error('Error fetching server status:', error);
                 document.getElementById('status').textContent = 'Error checking status';
