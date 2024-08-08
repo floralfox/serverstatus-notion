@@ -1,50 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Minecraft Server Widget</title>
-  <style>
-    /* Basic styling for the widget */
-    #widget {
-      font-family: sans-serif;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft  
+ Server Widget</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+        body {
+            font-family: "Nunito", sans-serif;
+            background-color:  
+ #1e1e1e; /* Dark mode background */
+            color: #d1d1d1;              /* Light text color */
+        }
+
+        #widget {
+            display: flex;               /* Use flexbox for layout */
+            flex-direction: column;    /* Arrange items vertically */
+            align-items: center;        /* Center items horizontally  
+ */
+            gap: 10px;                  /* Add spacing between items */
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1); /* Inverted shadow */
+        }
+
+        #server-info {
+            font-size: 14px;
+            text-align: center;
+        }
+
+        #status {
+            font-weight: bold;
+            font-size: 18px; 
+        }
+
+        .emoji {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-  <div id="widget">
-    <h2>My Minecraft Server</h2>
-    <p>Status: <span id="status"></span></p>
-    <p id="playerInfo" style="display: none;"> 
-        Players Online: <span id="onlinePlayers"></span>/<span id="maxPlayers"></span>
-    </p> 
-  </div>
 
-  <script>
-    const apiUrl = 'https://api.mcsrvstat.us/simple/185.229.32.95:25560';
+    <div id="widget">
+        <h2>My Minecraft Server</h2>
+        <div id="server-info">
+            <p><span class="emoji">🖥️</span> IP: 185.229.32.95:25560</p>
+            <p id="status">Loading...</p>
+            <p id="player-info" style="display: none;"> 
+                Players: <span id="onlinePlayers"></span>/<span id="maxPlayers"></span>
+            </p>
+        </div>
+    </div>
 
-    async function updateStatus() {
-      const response = await fetch(apiUrl);
-      const data = await response.text();
-      const lines = data.split('\n');
+    <script>
+        const apiUrl = 'https://api.mcsrvstat.us/simple/185.229.32.95:25560';
 
-      if (lines[0] === 'online') {
-        document.getElementById('status').textContent = 'Online';
-        document.getElementById('onlinePlayers').textContent = lines[1];
-        document.getElementById('maxPlayers').textContent = lines[2];
-        document.getElementById('playerInfo').style.display = 'block'; // Show player info
-      } else {
-        document.getElementById('status').textContent = 'Offline';
-        document.getElementById('playerInfo').style.display = 'none'; // Hide player info
-      }
-    }
+        async function updateStatus() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.text();
+                const lines = data.split('\n');
 
-    // Update every 10 seconds (or adjust as needed)
-    setInterval(updateStatus, 10000); 
+                if (lines[0] === 'online') {
+                    document.getElementById('status').textContent = 'Online';
+                    document.getElementById('onlinePlayers').textContent = lines[1];
+                    document.getElementById('maxPlayers').textContent = lines[2];
+                    document.getElementById('player-info').style.display = 'block';
+                } else {
+                    document.getElementById('status').textContent = 'Offline';
+                    document.getElementById('player-info').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error fetching server status:', error);
+                document.getElementById('status').textContent = 'Error checking status';
+                document.getElementById('player-info').style.display = 'none';
+            }
+        }
 
-    // Initial update
-    updateStatus();
-  </script>
+        setInterval(updateStatus, 10000); 
+        updateStatus(); 
+    </script>
 </body>
 </html>
